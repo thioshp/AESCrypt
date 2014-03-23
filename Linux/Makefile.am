@@ -28,6 +28,10 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/config.guess $(srcdir)/config.sub \
 	$(NULL)
 
+EXTRA_DIST = \
+	aescrypt.spec \
+	$(NULL)
+
 SUBDIRS = \
 	src \
 	gui \

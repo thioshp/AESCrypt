@@ -46,6 +46,7 @@ m4/ltsugar.m4
 m4/ltversion.m4
 m4/lt~obsolete.m4
 
+aescrypt.spec
 src/*.test
 src/aescrypt
 src/aescrypt_keygen

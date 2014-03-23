@@ -1,0 +1,50 @@
+Summary:	Advanced File Encryption for Windows, Mac, Linux and Java
+Name:		@PACKAGE_NAME@
+Version:	@PACKAGE_VERSION@
+Release:	@PACKAGE_RPM_RELEASE@%{?dist}
+License:	LGPLv2+ BSD
+URL:		http://www.aescrypt.com/
+Source:		http://www.aescrypt.com/download/v3/%{name}-%{version}.tar.gz
+Group:		Tools/Encryption
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+%description
+AES Crypt is a file encryption software available on several operating
+systems that uses the industry standard Advanced Encryption Standard (AES)
+to easily and securely encrypt files.
+
+%package gui
+Summary:	Advanced File Encryption GUI
+Requires:	%{name} = %{version}-%{release}
+
+%description gui
+GUI for Advanced File Encryption.
+
+%prep
+rm -rf "${buildroot}"
+%setup -q
+
+%build
+%configure \
+	--docdir="%{_docdir}/%{name}-%{version}"
+make %{?_smp_mflags}
+
+%install
+rm -rf "%{buildroot}"
+make %{?_smp_mflags} install DESTDIR="%{buildroot}"
+
+%files
+%doc README
+%{_bindir}/%{name}
+%{_bindir}/%{name}_keygen
+%{_mandir}/man1/aescrypt.1*
+
+%files gui
+%{_bindir}/%{name}-gui
+%{_datadir}/applications/AESCrypt.desktop
+%{_datadir}/icons/%{name}/SmallLock.png
+
+%changelog
+* Sat Feb 23 2013 Alon Bar-Lev <alonbl@redhat.com> - 2.0.6b-1
+- Initial write.

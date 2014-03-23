@@ -15,6 +15,8 @@
 AC_PREREQ(2.60)
 
 AC_INIT([aescrypt], [3.0.10_master])
+PACKAGE_RPM_RELEASE=1
+AC_SUBST([PACKAGE_RPM_RELEASE])
 
 AC_CONFIG_AUX_DIR([.])
 AM_CONFIG_HEADER([config.h])
@@ -95,6 +97,7 @@ AM_CONDITIONAL([WIN32], [test "${WIN32}" = "yes"])
 
 AC_CONFIG_FILES([
 	Makefile
+	aescrypt.spec
 	src/Makefile
 	gui/Makefile
 	man/Makefile
