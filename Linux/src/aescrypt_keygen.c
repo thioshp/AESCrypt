@@ -31,6 +31,7 @@
 #include <strings.h>
 #include <unistd.h> /* getopt */
 #include <iconv.h> /* iconv stuff */
+#include <getopt.h>
 #include <langinfo.h> /* nl_langinfo */
 #include <errno.h> /* errno */
 
@@ -113,7 +114,7 @@ void usage(const char *progname)
 {
     const char* progname_real; /* contains the real name of the program (without path) */
 
-    progname_real = rindex(progname, '/');
+    progname_real = strchr(progname, '/');
     if (progname_real == NULL) /* no path in progname: use progname */
     {
         progname_real = progname;
@@ -135,7 +136,7 @@ void version(const char *progname)
 {
     const char* progname_real; /* contains the real name of the program (without path) */
 
-    progname_real = rindex(progname, '/');
+    progname_real = strrchr(progname, '/');
     if (progname_real == NULL) /* no path in progname: use progname */
     {
         progname_real = progname;

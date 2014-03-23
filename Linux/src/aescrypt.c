@@ -27,7 +27,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <unistd.h> /* getopt */
+#include <unistd.h>
+#include <getopt.h>
 #include <assert.h>
 #include <stdlib.h> /* malloc */
 #include <time.h> /* time */
@@ -150,7 +151,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
 
         sprintf((char *)tag_buffer, "%s %s", PACKAGE_NAME, PACKAGE_VERSION);
         j = strlen((char *)tag_buffer);
-        if (fwrite(tag_buffer, 1, j, outfp) != j)
+        if (fwrite(tag_buffer, 1, j, outfp) != (size_t)j)
         {
             fprintf(stderr, "Error: Could not write tag to AES file (3)\n");
             fclose(randfp);
@@ -871,7 +872,7 @@ void usage(const char *progname)
     const char* progname_real; /* contains the real name of the program */
                                /*  (without path) */
 
-    progname_real = rindex(progname, '/');
+    progname_real = strrchr(progname, '/');
 
     if (progname_real == NULL) /* no path in progname: use progname */
     {
@@ -896,7 +897,7 @@ void version(const char *progname)
     const char* progname_real; /* contains the real name of the program */
                                /*  (without path) */
 
-    progname_real = rindex(progname, '/');
+    progname_real = strrchr(progname, '/');
 
     if (progname_real == NULL) /* no path in progname: use progname */
     {
