@@ -22,8 +22,9 @@
  *
  */
 
-#define _POSIX_C_SOURCE 200112L
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -34,7 +35,6 @@
 #include <errno.h> // errno
 
 #include "password.h"
-#include "version.h"
 
 /*
  * generate_password
@@ -146,7 +146,7 @@ void version(const char *progname)
     }
 
     fprintf(stderr, "\n%s version %s (%s)\n\n",
-            progname_real, PROG_VERSION, PROG_DATE);
+            progname_real, PACKAGE_VERSION, PACKAGE_DATE);
 }
 
 /*

@@ -18,8 +18,9 @@
  *
  */
 
-#define _POSIX_C_SOURCE 200112L
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
@@ -37,7 +38,6 @@
 #include "aescrypt.h"
 #include "password.h"
 #include "keyfile.h"
-#include "version.h"
 
 /*
  *  encrypt_stream
@@ -113,10 +113,10 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
     }
 
     // Write out the CREATED-BY tag
-    j = 11 +                   // "CREATED-BY\0"
-        strlen(PROG_NAME) +    // Program name
-        1 +                    // Space
-        strlen(PROG_VERSION);  // Program version ID
+    j = 11 +                      // "CREATED-BY\0"
+        strlen(PACKAGE_NAME) +    // Program name
+        1 +                       // Space
+        strlen(PACKAGE_VERSION);  // Program version ID
 
     // Our extension buffer is only 256 octets long, so
     // let's not write an extension if it is too big
@@ -140,7 +140,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
             return -1;
         }
 
-        sprintf((char *)tag_buffer, "%s %s", PROG_NAME, PROG_VERSION);
+        sprintf((char *)tag_buffer, "%s %s", PACKAGE_NAME, PACKAGE_VERSION);
         j = strlen((char *)tag_buffer);
         if (fwrite(tag_buffer, 1, j, outfp) != j)
         {
@@ -855,7 +855,7 @@ void version(const char *progname)
     }
 
     fprintf(stderr, "\n%s version %s (%s)\n\n",
-            progname_real, PROG_VERSION, PROG_DATE);
+            progname_real, PACKAGE_VERSION, PACKAGE_DATE);
 }
 
 /*

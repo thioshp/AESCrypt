@@ -18,8 +18,9 @@
  *
  */
 
-#define _POSIX_C_SOURCE 200112L
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>

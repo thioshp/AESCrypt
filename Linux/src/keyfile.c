@@ -6,6 +6,9 @@
  * Read the encryption key from a key file
  */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <stdio.h>
 #include "password.h"
 #include "keyfile.h"
