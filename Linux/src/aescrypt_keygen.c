@@ -1,6 +1,6 @@
 /*
  *  AES Crypt Key File Generator
- *  Copyright (C) 2007, 2008, 2009, 2013
+ *  Copyright (C) 2007-2014
  *  Paul E. Jones <paulej@packetizer.com>
  *
  * This software is licensed as "freeware."  Permission to distribute
@@ -22,9 +22,12 @@
  *
  */
 
+#define _POSIX_C_SOURCE 200112L
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h> // getopt
 #include <iconv.h> // iconv stuff
 #include <langinfo.h> // nl_langinfo
@@ -159,9 +162,14 @@ void cleanup(const char *outfile)
     }
 }
 
+/*
+ * main
+ *
+ */
 int main(int argc, char *argv[])
 {
-    int rc=0, passlen=0;
+    int rc=0;
+    int passlen=0;
     FILE *outfp = NULL;
     char outfile[1024];
     unsigned char pass_input[MAX_PASSWD_BUF],
@@ -301,7 +309,7 @@ int main(int argc, char *argv[])
         return  -1;
     }
     
-    if (fwrite(pass, 1, passlen, outfp) != passlen)
+    if (fwrite(pass, 1, passlen, outfp) != (size_t) passlen)
     {
         fprintf(stderr, "Error: Could not write password file.\n");
         if (strcmp("-",outfile))

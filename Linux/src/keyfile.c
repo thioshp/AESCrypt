@@ -25,7 +25,7 @@
 int ReadKeyFile(char *keyfile, unsigned char *pass)
 {
     FILE *fp = NULL;
-    int bytes_read;
+    size_t bytes_read;
     char temp;
     int endian = KF_UNK;
     unsigned char buffer[2];

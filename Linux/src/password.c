@@ -18,6 +18,8 @@
  *
  */
 
+#define _POSIX_C_SOURCE 200112L
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -254,7 +256,7 @@ int passwd_to_utf16(unsigned char *in_passwd,
               (char **) &ic_inbuf,
               &ic_inbytesleft,
               (char **) &ic_outbuf,
-              &ic_outbytesleft) == -1)
+              &ic_outbytesleft) == (size_t) -1)
     {
         switch (errno)
         {
