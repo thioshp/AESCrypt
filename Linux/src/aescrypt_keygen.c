@@ -29,10 +29,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
-#include <unistd.h> // getopt
-#include <iconv.h> // iconv stuff
-#include <langinfo.h> // nl_langinfo
-#include <errno.h> // errno
+#include <unistd.h> /* getopt */
+#include <iconv.h> /* iconv stuff */
+#include <langinfo.h> /* nl_langinfo */
+#include <errno.h> /* errno */
 
 #include "password.h"
 
@@ -111,10 +111,10 @@ int generate_password(int length, unsigned char *password)
  */
 void usage(const char *progname)
 {
-    const char* progname_real; //contains the real name of the program (without path)
+    const char* progname_real; /* contains the real name of the program (without path) */
 
     progname_real = rindex(progname, '/');
-    if (progname_real == NULL) //no path in progname: use progname
+    if (progname_real == NULL) /* no path in progname: use progname */
     {
         progname_real = progname;
     }
@@ -133,10 +133,10 @@ void usage(const char *progname)
  */
 void version(const char *progname)
 {
-    const char* progname_real; //contains the real name of the program (without path)
+    const char* progname_real; /* contains the real name of the program (without path) */
 
     progname_real = rindex(progname, '/');
-    if (progname_real == NULL) //no path in progname: use progname
+    if (progname_real == NULL) /* no path in progname: use progname */
     {
         progname_real = progname;
     }
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, "Error: A single output file must be specified.\n");
         usage(argv[0]);
-        // For security reasons, erase the password
+        /* For security reasons, erase the password */
         memset(pass, 0, MAX_PASSWD_BUF);
         return -1;
     }
@@ -245,14 +245,14 @@ int main(int argc, char *argv[])
         outfile[1023] = '\0';
     }
 
-    // Prompt for password if not provided on the command line
+    /* Prompt for password if not provided on the command line */
     if (passlen == 0)
     {
         passlen = read_password(pass_input, ENC);
 
         switch (passlen)
         {
-            case 0: //no password in input
+            case 0: /* no password in input */
                 fprintf(stderr, "Error: No password supplied.\n");
                 return -1;
             case AESCRYPT_READPWD_FOPEN:
@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
 
         if (passlen < 0)
         {
-            // For security reasons, erase the password
+            /* For security reasons, erase the password */
             memset(pass, 0, MAX_PASSWD_BUF);
             return -1;
         }
@@ -290,7 +290,7 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, "Error opening output file %s : ", outfile);
         perror("");
-        // For security reasons, erase the password
+        /* For security reasons, erase the password */
         memset(pass, 0, MAX_PASSWD_BUF);
         return  -1;
     }
@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
         fclose(outfp);
     }
 
-    // For security reasons, erase the password
+    /* For security reasons, erase the password */
     memset(pass, 0, MAX_PASSWD_BUF);
 
     return rc;

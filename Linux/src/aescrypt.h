@@ -28,4 +28,4 @@ typedef struct {
 
 typedef unsigned char sha256_t[32];
 
-#endif // __AESCRYPT_H__
+#endif /* __AESCRYPT_H__ */

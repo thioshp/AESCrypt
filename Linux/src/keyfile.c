@@ -35,14 +35,14 @@ int ReadKeyFile(char *keyfile, unsigned char *pass)
     int passlen = 0;
     int pass_max_len = MAX_PASSWD_LEN * 2;
 
-    // Try to open the key file
+    /* Try to open the key file */
     if ((fp = fopen(keyfile, "r")) == NULL)
     {
         perror("Error: unable to read the specified key file");
         return -1;
     }
 
-    // Read the Byte Order Mark (BOM)
+    /* Read the Byte Order Mark (BOM) */
     if ((bytes_read = fread(buffer, 1, 2, fp)) != 2)
     {
         fprintf(stderr, "Error: unable to read the BOM\n");
@@ -50,7 +50,7 @@ int ReadKeyFile(char *keyfile, unsigned char *pass)
         return -1;
     }
 
-    // Determine if the BOM is present and its value
+    /* Determine if the BOM is present and its value */
     if (((buffer[0] == 0xFF) && (buffer[1] == 0xFE)) ||
         ((buffer[0] == 0xFE) && (buffer[1] == 0xFF)))
     {
@@ -70,8 +70,10 @@ int ReadKeyFile(char *keyfile, unsigned char *pass)
         return -1;
     }
 
-    // Read two bytes at a time, ensuring the password is composed
-    // in UTF-16LE order in memory
+    /*
+     * Read two bytes at a time, ensuring the password is composed
+     * in UTF-16LE order in memory
+     */
     while ((bytes_read = fread(buffer, 1, 2, fp)) > 0)
     {
         if (bytes_read != 2)
