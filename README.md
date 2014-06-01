@@ -12,11 +12,4 @@ The code for each platform is stored in a directory for that platform
 any additional information that might be useful for that platform.
 
 Some of the source code is not yet published here, though all source code
-is still available from https://www.aescrypt.com/download/.  I will
-continue to work with maintainers to bring all of the source code to
-this repository and update it periodically.
-
-Cheers!
-Paul E. Jones
-Email: paulej@packetizer.com
-Web: http://www.paulej.com/
+is still available from https://www.aescrypt.com/download/.
