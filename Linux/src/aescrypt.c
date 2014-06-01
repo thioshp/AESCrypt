@@ -38,6 +38,7 @@
 #include "password.h"
 #include "keyfile.h"
 #include "version.h"
+#include "util.h"
 
 /*
  *  encrypt_stream
@@ -320,7 +321,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
     }
 
     // Wipe the IV and encryption mey from memory
-    memset(iv_key, 0, 48);
+    explicit_bzero(iv_key, 48);
 
     sha256_starts(&sha_ctx);
     sha256_update(&sha_ctx, ipad, 64);
@@ -608,7 +609,7 @@ int decrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
         }
 
         // Wipe the IV and encryption mey from memory
-        memset(iv_key, 0, 48);
+        explicit_bzero(iv_key, 48);
 
         sha256_starts(&sha_ctx);
         sha256_update(&sha_ctx, ipad, 64);
@@ -1041,7 +1042,7 @@ int main(int argc, char *argv[])
         {
             cleanup(outfile);
             // For security reasons, erase the password
-            memset(pass, 0, MAX_PASSWD_BUF);
+            explicit_bzero(pass, MAX_PASSWD_BUF);
             return -1;
         }
     }
@@ -1057,7 +1058,7 @@ int main(int argc, char *argv[])
         usage(argv[0]);
         cleanup(outfile);
         // For security reasons, erase the password
-        memset(pass, 0, MAX_PASSWD_BUF);
+        explicit_bzero(pass, MAX_PASSWD_BUF);
         return -1;
     }
 
@@ -1077,7 +1078,7 @@ int main(int argc, char *argv[])
                 usage(argv[0]);
                 cleanup(outfile);
                 // For security reasons, erase the password
-                memset(pass, 0, MAX_PASSWD_BUF);
+                explicit_bzero(pass, MAX_PASSWD_BUF);
                 return -1;
             }
             infp = stdin;
@@ -1096,7 +1097,7 @@ int main(int argc, char *argv[])
             perror("");
             cleanup(outfile);
             // For security reasons, erase the password
-            memset(pass, 0, MAX_PASSWD_BUF);
+            explicit_bzero(pass, MAX_PASSWD_BUF);
             return -1;
         }
         
@@ -1115,7 +1116,7 @@ int main(int argc, char *argv[])
                     perror("");
                     cleanup(outfile);
                     // For security reasons, erase the password
-                    memset(pass, 0, MAX_PASSWD_BUF);
+                    explicit_bzero(pass, MAX_PASSWD_BUF);
                     return -1;
                 }
             }
@@ -1139,7 +1140,7 @@ int main(int argc, char *argv[])
                     perror("");
                     cleanup(outfile);
                     // For security reasons, erase the password
-                    memset(pass, 0, MAX_PASSWD_BUF);
+                    explicit_bzero(pass, MAX_PASSWD_BUF);
                     return -1;
                 }
             }
@@ -1163,7 +1164,7 @@ int main(int argc, char *argv[])
         {
             cleanup(outfile);
             // For security reasons, erase the password
-            memset(pass, 0, MAX_PASSWD_BUF);
+            explicit_bzero(pass, MAX_PASSWD_BUF);
             return -1;
         }
 
@@ -1174,7 +1175,7 @@ int main(int argc, char *argv[])
     }
 
     // For security reasons, erase the password
-    memset(pass, 0, MAX_PASSWD_BUF);
+    explicit_bzero(pass, MAX_PASSWD_BUF);
     
     return rc;
 }

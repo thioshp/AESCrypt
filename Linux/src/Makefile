@@ -26,10 +26,10 @@ LIBS=
 
 all: aescrypt aescrypt_keygen
 
-aescrypt: aescrypt.o aes.o sha256.o password.o keyfile.o
+aescrypt: aescrypt.o aes.o sha256.o password.o keyfile.o util.o
 	$(CC) $(CFLAGS) $(LIBS) -o $@ $^
 
-aescrypt_keygen: aescrypt_keygen.o password.o
+aescrypt_keygen: aescrypt_keygen.o password.o util.o
 	$(CC) $(CFLAGS) $(LIBS) -o $@ $^
 
 test:
