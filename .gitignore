@@ -1,0 +1,4 @@
+*.o
+Linux/src/aescrypt
+Linux/src/aescrypt_keygen
+
