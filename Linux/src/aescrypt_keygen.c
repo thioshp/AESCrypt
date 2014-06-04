@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error: A single output file must be specified.\n");
         usage(argv[0]);
         // For security reasons, erase the password
-        explicit_bzero(pass, MAX_PASSWD_BUF);
+        memset_secure(pass, 0, MAX_PASSWD_BUF);
         return -1;
     }
     else
@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
         if (passlen < 0)
         {
             // For security reasons, erase the password
-            explicit_bzero(pass, MAX_PASSWD_BUF);
+            memset_secure(pass, 0, MAX_PASSWD_BUF);
             return -1;
         }
     }
@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error opening output file %s : ", outfile);
         perror("");
         // For security reasons, erase the password
-        explicit_bzero(pass, MAX_PASSWD_BUF);
+        memset_secure(pass, 0, MAX_PASSWD_BUF);
         return  -1;
     }
 
@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
     }
 
     // For security reasons, erase the password
-    explicit_bzero(pass, MAX_PASSWD_BUF);
+    memset_secure(pass, 0, MAX_PASSWD_BUF);
 
     return rc;
 }

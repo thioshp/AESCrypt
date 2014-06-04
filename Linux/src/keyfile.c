@@ -106,7 +106,7 @@ int ReadKeyFile(char *keyfile, unsigned char *pass)
         *pass++ = buffer[1];
     }
     // Even if it is only two octets, we still remove them from memory
-    explicit_bzero(buffer, sizeof(buffer));
+    memset_secure(buffer, 0, sizeof(buffer));
 
     fclose(fp);
 

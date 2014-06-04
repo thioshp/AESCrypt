@@ -133,8 +133,8 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
             if (tcsetattr(tty, TCSANOW, &t) < 0)
             {
                 // For security reasons, erase the password
-                explicit_bzero(buffer, MAX_PASSWD_BUF);
-                explicit_bzero(pwd_confirm, MAX_PASSWD_BUF);
+                memset_secure(buffer, 0, MAX_PASSWD_BUF);
+                memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
                 fclose(ftty);
                 return AESCRYPT_READPWD_TCSETATTR;
             }
@@ -169,8 +169,8 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
             if (tcsetattr(tty, TCSANOW, &t) < 0)
             {
                 // For security reasons, erase the password
-                explicit_bzero(buffer, MAX_PASSWD_BUF);
-                explicit_bzero(pwd_confirm, MAX_PASSWD_BUF);
+                memset_secure(buffer, 0, MAX_PASSWD_BUF);
+                memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
                 fclose(ftty);
                 return AESCRYPT_READPWD_TCSETATTR;
             }
@@ -180,8 +180,8 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
         if (c == EOF)
         {
             // For security reasons, erase the password
-            explicit_bzero(buffer, MAX_PASSWD_BUF);
-            explicit_bzero(pwd_confirm, MAX_PASSWD_BUF);
+            memset_secure(buffer, 0, MAX_PASSWD_BUF);
+            memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
             fclose(ftty);
             return AESCRYPT_READPWD_FGETC;
         }
@@ -191,8 +191,8 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
         if (chars_read > MAX_PASSWD_LEN)
         {
             // For security reasons, erase the password
-            explicit_bzero(buffer, MAX_PASSWD_BUF);
-            explicit_bzero(pwd_confirm, MAX_PASSWD_BUF);
+            memset_secure(buffer, 0, MAX_PASSWD_BUF);
+            memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
             fclose(ftty);
             return AESCRYPT_READPWD_TOOLONG;
         }
@@ -206,12 +206,12 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
     {
         // Check if passwords match
         match = strcmp((char*)buffer, (char*)pwd_confirm);
-        explicit_bzero(pwd_confirm, MAX_PASSWD_BUF);
+        memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
 
         if (match != 0)
         {
             // For security reasons, erase the password
-            explicit_bzero(buffer, MAX_PASSWD_BUF);
+            memset_secure(buffer, 0, MAX_PASSWD_BUF);
             return AESCRYPT_READPWD_NOMATCH;
         }
     }
