@@ -35,6 +35,7 @@
 #include <termios.h> /* tcgetattr,tcsetattr */
 
 #include "password.h"
+#include "util.h"
 
 /*
  *  read_password_error
@@ -137,8 +138,8 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
             if (tcsetattr(tty, TCSANOW, &t) < 0)
             {
                 /* For security reasons, erase the password */
-                memset(buffer, 0, MAX_PASSWD_BUF);
-                memset(pwd_confirm, 0, MAX_PASSWD_BUF);
+                memset_secure(buffer, 0, MAX_PASSWD_BUF);
+                memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
                 fclose(ftty);
                 return AESCRYPT_READPWD_TCSETATTR;
             }
@@ -173,8 +174,8 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
             if (tcsetattr(tty, TCSANOW, &t) < 0)
             {
                 /* For security reasons, erase the password */
-                memset(buffer, 0, MAX_PASSWD_BUF);
-                memset(pwd_confirm, 0, MAX_PASSWD_BUF);
+                memset_secure(buffer, 0, MAX_PASSWD_BUF);
+                memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
                 fclose(ftty);
                 return AESCRYPT_READPWD_TCSETATTR;
             }
@@ -184,8 +185,8 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
         if (c == EOF)
         {
             /* For security reasons, erase the password */
-            memset(buffer, 0, MAX_PASSWD_BUF);
-            memset(pwd_confirm, 0, MAX_PASSWD_BUF);
+            memset_secure(buffer, 0, MAX_PASSWD_BUF);
+            memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
             fclose(ftty);
             return AESCRYPT_READPWD_FGETC;
         }
@@ -197,8 +198,8 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
         if (chars_read > MAX_PASSWD_LEN)
         {
             /* For security reasons, erase the password */
-            memset(buffer, 0, MAX_PASSWD_BUF);
-            memset(pwd_confirm, 0, MAX_PASSWD_BUF);
+            memset_secure(buffer, 0, MAX_PASSWD_BUF);
+            memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
             fclose(ftty);
             return AESCRYPT_READPWD_TOOLONG;
         }
@@ -212,12 +213,12 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
     {
         /* Check if passwords match */
         match = strcmp((char*)buffer, (char*)pwd_confirm);
-        memset(pwd_confirm, 0, MAX_PASSWD_BUF);
+        memset_secure(pwd_confirm, 0, MAX_PASSWD_BUF);
 
         if (match != 0)
         {
             /* For security reasons, erase the password */
-            memset(buffer, 0, MAX_PASSWD_BUF);
+            memset_secure(buffer, 0, MAX_PASSWD_BUF);
             return AESCRYPT_READPWD_NOMATCH;
         }
     }

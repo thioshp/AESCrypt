@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "password.h"
 #include "keyfile.h"
+#include "util.h"
 
 /*
  * ReadKeyFile
@@ -109,6 +110,8 @@ int ReadKeyFile(char *keyfile, unsigned char *pass)
         *pass++ = buffer[0];
         *pass++ = buffer[1];
     }
+    // Even if it is only two octets, we still remove them from memory
+    memset_secure(buffer, 0, sizeof(buffer));
 
     fclose(fp);
 
