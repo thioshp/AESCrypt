@@ -341,7 +341,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
         opad[i] ^= iv_key[i+16];
     }
 
-    /* Wipe the IV and encryption mey from memory */
+    /* Wipe the IV and encryption key from memory */
     memset_secure(iv_key, 0, 48);
 
     sha256_starts(&sha_ctx);
@@ -641,7 +641,7 @@ int decrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
             opad[i] ^= iv_key[i+16];
         }
 
-        /* Wipe the IV and encryption mey from memory */
+        /* Wipe the IV and encryption key from memory */
         memset_secure(iv_key, 0, 48);
 
         sha256_starts(&sha_ctx);
