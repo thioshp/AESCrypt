@@ -43,11 +43,13 @@ aescrypt_SOURCES = \
 	password.c password.h \
 	keyfile.c keyfile.h \
 	aescrypt.h \
+	util.c util.h \
 	$(NULL)
 
 aescrypt_keygen_SOURCES = \
 	aescrypt_keygen.c \
 	password.c password.h \
+	util.c util.h \
 	$(NULL)
 
 sha_test_SOURCES = \

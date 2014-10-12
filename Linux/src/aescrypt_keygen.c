@@ -34,7 +34,6 @@
 #include <getopt.h>
 #include <langinfo.h> /* nl_langinfo */
 #include <errno.h> /* errno */
-
 #include "password.h"
 #include "util.h"
 

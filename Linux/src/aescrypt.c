@@ -35,7 +35,6 @@
 #include <iconv.h> /* iconv stuff */
 #include <langinfo.h> /* nl_langinfo */
 #include <errno.h> /* errno */
-
 #include "aescrypt.h"
 #include "password.h"
 #include "keyfile.h"
