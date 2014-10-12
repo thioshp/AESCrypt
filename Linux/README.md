@@ -12,3 +12,9 @@ Note that the package maintainers, when producing an official release,
 will run the above command and only publish the source files needed
 to run "configure" and "make".  Official source releases can be downloaded
 from https://www.aescrypt.com/.
+
+Package maintainers can create a tarball using the following command:
+
+```
+make dist 
+```
