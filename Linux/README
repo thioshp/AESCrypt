@@ -38,14 +38,17 @@ Replace x.y.z with the version information that is a part of the
 filename.  This should create a directory with the same name, but
 without .tgz.
 
-Next change directories into aescrypt-x.y.z/src (or whatever the
+Next change directories into aescrypt-x.y.z (or whatever the
 name of the directory is that is created).
 
-Type "make".  If this succeeds, you should have the executable files
-compiled in the directory.  To install them, you can type
-"make install" or manually copy the executable files wherever you
-want them.  The two files of interest are "aescrypt"
-and "aescrypt_keygen".
+Type these commands at the command prompt:
+    $ ./configure
+    $ make
+
+If this succeeds, you should have the executable files compiled in the
+directory.  To install them, you can type "make install" or manually copy
+the executable files wherever you want them.  The two files of interest
+are "aescrypt" and "aescrypt_keygen".
 
 If the system tells you it could not find "make", you may not have
 a C compiler and tools installed.  It should compile cleanly
