@@ -21,4 +21,4 @@
 #define PROG_VERSION    "3.0.10-alpha"
 #define PROG_DATE       "June 1, 2014"
 
-#endif // __AESCRYPT_VERSION_H__
+#endif /* __AESCRYPT_VERSION_H__ */

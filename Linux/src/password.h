@@ -47,4 +47,4 @@ int read_password(unsigned char* buffer,
                   encryptmode_t mode);
 
 
-#endif // __AESCRYPT_PASSWORD_H__
+#endif /* __AESCRYPT_PASSWORD_H__ */

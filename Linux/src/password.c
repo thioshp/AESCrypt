@@ -18,18 +18,21 @@
  *
  */
 
-#define _POSIX_C_SOURCE 200112L
-
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <unistd.h> // getopt
-#include <stdlib.h> // malloc
-#include <iconv.h> // iconv stuff
-#include <langinfo.h> // nl_langinfo
-#include <errno.h> // errno
-#include <termios.h> // tcgetattr,tcsetattr
+#include <unistd.h> /* getopt */
+#include <stdlib.h> /* malloc */
+#ifdef ENABLE_ICONV
+#include <iconv.h> /* iconv stuff */
+#endif
+#include <langinfo.h> /* nl_langinfo */
+#include <errno.h> /* errno */
+#include <termios.h> /* tcgetattr,tcsetattr */
 
 #include "password.h"
 
@@ -72,19 +75,19 @@ const char* read_password_error(int error)
 
 int read_password(unsigned char* buffer, encryptmode_t mode)
 {
-    struct termios t;                   // Used to set ECHO attribute
-    int echo_enabled;                   // Was echo enabled?
-    int tty;                            // File descriptor for tty
-    FILE* ftty;                         // File for tty
+    struct termios t;                   /* Used to set ECHO attribute */
+    int echo_enabled;                   /* Was echo enabled? */
+    int tty;                            /* File descriptor for tty */
+    FILE* ftty;                         /* File for tty */
     unsigned char pwd_confirm[MAX_PASSWD_BUF];
-                                        // Used for password confirmation
-    int c;                              // Character read from input
-    int chars_read;                     // Chars read from input
-    unsigned char* p;                   // Password buffer pointer
-    int i;                              // Loop counter
-    int match;                          // Do the two passwords match?
+                                        /* Used for password confirmation */
+    int c;                              /* Character read from input */
+    int chars_read;                     /* Chars read from input */
+    unsigned char* p;                   /* Password buffer pointer */
+    int i;                              /* Loop counter */
+    int match;                          /* Do the two passwords match? */
 
-    // Open the tty
+    /* Open the tty */
     ftty = fopen("/dev/tty", "r+");
     if (ftty == NULL)
     {
@@ -96,18 +99,20 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
         return AESCRYPT_READPWD_FILENO;
     }
  
-    // Get the tty attrs
+    /* Get the tty attrs */
     if (tcgetattr(tty, &t) < 0)
     {
         fclose(ftty);
         return AESCRYPT_READPWD_TCGETATTR;
     }
 
-    // Round 1 - Read the password into buffer
-    // (If encoding) Round 2 - read password 2 for confirmation
+    /*
+     * Round 1 - Read the password into buffer
+     * (If encoding) Round 2 - read password 2 for confirmation
+     */
     for (i = 0; (i == 0) || (i == 1 && mode == ENC); i++)
     {
-        // Choose the buffer where to put the password
+        /* Choose the buffer where to put the password */
         if (!i)
         {
             p = buffer;
@@ -117,7 +122,7 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
             p = pwd_confirm;
         }
 
-        // Prompt for password
+        /* Prompt for password */
         if (i)
         {
             fprintf(ftty, "Re-");
@@ -125,13 +130,13 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
         fprintf(ftty, "Enter password: ");
         fflush(ftty);
 
-        // Disable echo if necessary
+        /* Disable echo if necessary */
         if (t.c_lflag & ECHO)
         {
             t.c_lflag &= ~ECHO;
             if (tcsetattr(tty, TCSANOW, &t) < 0)
             {
-                // For security reasons, erase the password
+                /* For security reasons, erase the password */
                 memset(buffer, 0, MAX_PASSWD_BUF);
                 memset(pwd_confirm, 0, MAX_PASSWD_BUF);
                 fclose(ftty);
@@ -144,11 +149,11 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
             echo_enabled = 0;
         }
 
-        // Read from input and fill buffer till MAX_PASSWD_LEN chars are read
+        /* Read from input and fill buffer till MAX_PASSWD_LEN chars are read */
         chars_read = 0;
         while (((c = fgetc(ftty)) != '\n') && (c != EOF))
         {
-            // fill buffer till MAX_PASSWD_LEN
+            /* fill buffer till MAX_PASSWD_LEN */
             if (chars_read <= MAX_PASSWD_LEN)
                 p[chars_read] = (char) c;
             chars_read++;
@@ -161,13 +166,13 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
 
         fprintf(ftty, "\n");
 
-        // Enable echo if disabled above
+        /* Enable echo if disabled above */
         if (echo_enabled)
         {
             t.c_lflag |= ECHO;
             if (tcsetattr(tty, TCSANOW, &t) < 0)
             {
-                // For security reasons, erase the password
+                /* For security reasons, erase the password */
                 memset(buffer, 0, MAX_PASSWD_BUF);
                 memset(pwd_confirm, 0, MAX_PASSWD_BUF);
                 fclose(ftty);
@@ -175,21 +180,23 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
             }
         }
 
-        // check for EOF error
+        /* check for EOF error */
         if (c == EOF)
         {
-            // For security reasons, erase the password
+            /* For security reasons, erase the password */
             memset(buffer, 0, MAX_PASSWD_BUF);
             memset(pwd_confirm, 0, MAX_PASSWD_BUF);
             fclose(ftty);
             return AESCRYPT_READPWD_FGETC;
         }
 
-        // Check chars_read.  The password must be maximum MAX_PASSWD_LEN
-        // chars.  If too long an error is returned
+        /*
+         * Check chars_read.  The password must be maximum MAX_PASSWD_LEN
+         * chars.  If too long an error is returned
+         */
         if (chars_read > MAX_PASSWD_LEN)
         {
-            // For security reasons, erase the password
+            /* For security reasons, erase the password */
             memset(buffer, 0, MAX_PASSWD_BUF);
             memset(pwd_confirm, 0, MAX_PASSWD_BUF);
             fclose(ftty);
@@ -197,19 +204,19 @@ int read_password(unsigned char* buffer, encryptmode_t mode)
         }
     }
 
-    // Close the tty
+    /* Close the tty */
     fclose(ftty);
 
-    // Password must be compared only when encrypting
+    /* Password must be compared only when encrypting */
     if (mode == ENC)
     {
-        // Check if passwords match
+        /* Check if passwords match */
         match = strcmp((char*)buffer, (char*)pwd_confirm);
         memset(pwd_confirm, 0, MAX_PASSWD_BUF);
 
         if (match != 0)
         {
-            // For security reasons, erase the password
+            /* For security reasons, erase the password */
             memset(buffer, 0, MAX_PASSWD_BUF);
             return AESCRYPT_READPWD_NOMATCH;
         }
@@ -234,6 +241,15 @@ int passwd_to_utf16(unsigned char *in_passwd,
     size_t ic_inbytesleft,
            ic_outbytesleft;
 
+#ifndef ENABLE_ICONV
+    /* support only latin */
+    int i;
+    for (i=0;i<length+1;i++) {
+        out_passwd[i*2] = in_passwd[i];
+        out_passwd[i*2+1] = 0;
+    }
+    return length*2;
+#else
     /* Max length is specified in character, but this function deals
      * with bytes.  So, multiply by two since we are going to create a
      * UTF-16 string.
@@ -266,7 +282,7 @@ int passwd_to_utf16(unsigned char *in_passwd,
                 return -1;
                 break;
             default:
-                //~ printf("EILSEQ(%d), EINVAL(%d), %d\n", EILSEQ, EINVAL, errno);
+                /*~ printf("EILSEQ(%d), EINVAL(%d), %d\n", EILSEQ, EINVAL, errno);*/
                 fprintf(stderr,
                         "Error: Invalid or incomplete multibyte sequence\n");
                 iconv_close(condesc);
@@ -275,5 +291,6 @@ int passwd_to_utf16(unsigned char *in_passwd,
     }
     iconv_close(condesc);
     return (max_length - ic_outbytesleft);
+#endif
 }
 
