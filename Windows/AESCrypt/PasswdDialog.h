@@ -30,10 +30,10 @@ class PasswdDialog : public CAxDialogImpl<PasswdDialog>
         bool encrypting;
 
         BEGIN_MSG_MAP(PasswdDialog)
-	        MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-	        COMMAND_HANDLER(IDOK, BN_CLICKED, OnClickedOK)
-	        COMMAND_HANDLER(IDCANCEL, BN_CLICKED, OnClickedCancel)
-	        CHAIN_MSG_MAP(CAxDialogImpl<PasswdDialog>)
+            MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+            COMMAND_HANDLER(IDOK, BN_CLICKED, OnClickedOK)
+            COMMAND_HANDLER(IDCANCEL, BN_CLICKED, OnClickedCancel)
+            CHAIN_MSG_MAP(CAxDialogImpl<PasswdDialog>)
         END_MSG_MAP()
 
         // Handler prototypes:

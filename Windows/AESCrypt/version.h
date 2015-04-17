@@ -16,7 +16,7 @@
 #define __AESCRYPT_VERSION_H__
 
 #define PROG_NAME       "aescrypt (Windows GUI)"
-#define PROG_VERSION    "3.0.9"
-#define PROG_DATE       "March 9, 2013"
+#define PROG_VERSION    "3.10"
+#define PROG_DATE       "April 16, 2015"
 
 #endif // __AESCRYPT_VERSION_H__

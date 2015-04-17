@@ -1,6 +1,6 @@
 /*
  *  AES Crypt for Linux
- *  Copyright (C) 2007-2014
+ *  Copyright (C) 2007-2015
  *
  *  Contributors:
  *      Glenn Washburn <crass@berlios.de>
@@ -405,6 +405,13 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
     if (fwrite(digest, 1, 32, outfp) != 32)
     {
         fprintf(stderr, "Error: Could not write the file HMAC\n");
+        return -1;
+    }
+
+    /* Flush the output buffer to ensure all data is written to disk */
+    if (fflush(outfp))
+    {
+        fprintf(stderr, "Error: Could not flush output file buffer\n");
         return -1;
     }
 
@@ -859,6 +866,13 @@ int decrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
         return -1;
     }
 
+    /* Flush the output buffer to ensure all data is written to disk */
+    if (fflush(outfp))
+    {
+        fprintf(stderr, "Error: Could not flush output file buffer\n");
+        return -1;
+    }
+
     return 0;
 }
 
@@ -1211,7 +1225,15 @@ int main(int argc, char *argv[])
         }
         if ((outfp != stdout) && (outfp != NULL))
         {
-            fclose(outfp);
+            if (fclose(outfp))
+            {
+                if (!rc)
+                {
+                    fprintf(stderr,
+                            "Error: Could not properly close output file \n");
+                    rc = -1;
+                }
+            }
         }
 
         /* If there was an error, remove the output file */

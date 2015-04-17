@@ -1,7 +1,7 @@
 /*
  *  AESCryptWorkerThreads.cpp
  *
- *  Copyright (C) 2006, 2007, 2008, 2013
+ *  Copyright (C) 2006, 2007, 2008, 2013, 2015
  *  Paul E. Jones <paulej@packetizer.com>
  *  All Rights Reserved.
  *
@@ -846,15 +846,28 @@ void AESCryptWorkerThreads::EncryptFiles(
                     error_abort = true;
                 }
 
+                // Close the input file
                 in_buffered_file.CloseFile();
-                out_buffered_file.CloseFile();
+
+                // Close the output file (writing any final buffered data and
+                // checking for errors)
+                result_code = out_buffered_file.CloseFile();
+                if ((error_abort == false) && (result_code != ERROR_SUCCESS))
+                {
+                    std::basic_string<TCHAR> message;
+
+                    message = _T("Unable to write to ");
+                    message += out_file;
+                    ::ReportError(message, result_code);
+
+                    error_abort = true;
+                }
 
                 // We will attempt to cleanup, but we don't care if this
                 // really works or not...
                 if (error_abort == true)
                 {
                     DeleteFile(out_file.c_str());
-                    error_abort = true;
                 }
             }
         }
@@ -1445,8 +1458,22 @@ void AESCryptWorkerThreads::DecryptFiles(
                     error_abort = true;
                 }
 
+                // Close the input file
                 in_buffered_file.CloseFile();
-                out_buffered_file.CloseFile();
+
+                // Close the output file (writing any final buffered data and
+                // checking for errors)
+                result_code = out_buffered_file.CloseFile();
+                if ((error_abort == false) && (result_code != ERROR_SUCCESS))
+                {
+                    std::basic_string<TCHAR> message;
+
+                    message = _T("Unable to write to ");
+                    message += out_file;
+                    ::ReportError(message, result_code);
+
+                    error_abort = true;
+                }
 
                 // We will attempt to cleanup, but we don't care if this
                 // really works or not...

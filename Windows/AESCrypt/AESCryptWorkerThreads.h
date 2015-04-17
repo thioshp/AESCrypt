@@ -28,7 +28,7 @@ class AESCryptWorkerThreads
         inline void DoMessageLoop();
 
         void EncryptFiles(  StringList *file_list,
-							TCHAR *passwd);
+                            TCHAR *passwd);
 
         void DecryptFiles(  StringList *file_list,
                             TCHAR *passwd);

@@ -43,9 +43,9 @@ class ATL_NO_VTABLE AESCryptShellExt :
 
         // IContextMenu
 #ifdef _M_X64
-		STDMETHOD(GetCommandString)(UINT_PTR, UINT, UINT*, LPSTR, UINT);
+        STDMETHOD(GetCommandString)(UINT_PTR, UINT, UINT*, LPSTR, UINT);
 #else
-		STDMETHOD(GetCommandString)(UINT, UINT, UINT*, LPSTR, UINT);
+        STDMETHOD(GetCommandString)(UINT, UINT, UINT*, LPSTR, UINT);
 #endif
         STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO);
         STDMETHOD(QueryContextMenu)(HMENU, UINT, UINT, UINT, UINT);
