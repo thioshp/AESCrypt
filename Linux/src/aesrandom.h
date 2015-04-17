@@ -1,7 +1,12 @@
 /*
- * util.c
+ *  aesrandom.h
+ *  Copyright (C) 2014
  *
- * Copyright (C) 2014
+ *  Contributors:
+ *      Glenn Washburn <crass@berlios.de>
+ *      Paul E. Jones <paulej@packetizer.com>
+ *      Mauro Gilardi <galvao.m@gmail.com>
+ *      Alon Bar-Lev <alon.barlev@gmail.com>
  *
  * This software is licensed as "freeware."  Permission to distribute
  * this software in source and binary forms is hereby granted without a
@@ -14,17 +19,10 @@
  *
  */
 
-#include <string.h>
+#ifndef __AESCRYPT_AESRANDOM_H__
 
-/*
- * explicit_bzero taken from NetBSD, modified to be a pure wrapper to
- * memset()
- * The compiler will not optimize a call to a volatile function pointer
- * so we use this function to clean up sensitive memory areas.
- */
+void *aesrandom_open();
+void aesrandom_close(void *aesrandom);
+int aesrandom_read(void *aesrandom, unsigned char *buffer, size_t size);
 
-void *memset_secure(void *b, int c, size_t len)
-{
-    static void *(*volatile memset_impl)(void *, int, size_t) = memset;
-    return (*memset_impl)(b, c, len);
-}
+#endif /* __AESCRYPT_AESRANDOM_H__ */

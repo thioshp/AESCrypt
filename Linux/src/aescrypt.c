@@ -32,13 +32,12 @@
 #include <assert.h>
 #include <stdlib.h> /* malloc */
 #include <time.h> /* time */
-#include <iconv.h> /* iconv stuff */
-#include <langinfo.h> /* nl_langinfo */
 #include <errno.h> /* errno */
 #include "aescrypt.h"
 #include "password.h"
 #include "keyfile.h"
 #include "util.h"
+#include "aesrandom.h"
 
 /*
  *  encrypt_stream
@@ -59,7 +58,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
     unsigned char ipad[64], opad[64];
     time_t current_time;
     pid_t process_id;
-    FILE *randfp = NULL;
+    void *aesrand;
     unsigned char tag_buffer[256];
 
     /*
@@ -68,9 +67,9 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
      * fail to produce something.  Also, we're going to hash the result
      * anyway.
      */
-    if ((randfp = fopen("/dev/urandom", "r")) == NULL)
+    if ((aesrand = aesrandom_open()) == NULL)
     {
-        perror("Error open /dev/urandom:");
+        perror("Error open random:");
         return -1;
     }
 
@@ -90,11 +89,11 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
         sha256_starts(&sha_ctx);
         for(j=0; j<256; j++)
         {
-            if ((bytes_read = fread(buffer, 1, 32, randfp)) != 32)
+            if ((bytes_read = aesrandom_read(aesrand, buffer, 32)) != 32)
             {
-                fprintf(stderr, "Error: Couldn't read from /dev/urandom : %u\n",
+                fprintf(stderr, "Error: Couldn't read from random : %u\n",
                         (unsigned) bytes_read);
-                fclose(randfp);
+                aesrandom_close(aesrand);
                 return -1;
             }
             sha256_update(&sha_ctx, buffer, 32);
@@ -115,7 +114,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
     if (fwrite(buffer, 1, 5, outfp) != 5)
     {
         fprintf(stderr, "Error: Could not write out header data\n");
-        fclose(randfp);
+        aesrandom_close(aesrand);
         return -1;
     }
 
@@ -136,7 +135,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
         if (fwrite(buffer, 1, 2, outfp) != 2)
         {
             fprintf(stderr, "Error: Could not write tag to AES file (1)\n");
-            fclose(randfp);
+            aesrandom_close(aesrand);
             return -1;
         }
 
@@ -145,7 +144,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
         if (fwrite(tag_buffer, 1, 11, outfp) != 11)
         {
             fprintf(stderr, "Error: Could not write tag to AES file (2)\n");
-            fclose(randfp);
+            aesrandom_close(aesrand);
             return -1;
         }
 
@@ -154,7 +153,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
         if (fwrite(tag_buffer, 1, j, outfp) != (size_t)j)
         {
             fprintf(stderr, "Error: Could not write tag to AES file (3)\n");
-            fclose(randfp);
+            aesrandom_close(aesrand);
             return -1;
         }
     }
@@ -165,14 +164,14 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
     if (fwrite(buffer, 1, 2, outfp) != 2)
     {
         fprintf(stderr, "Error: Could not write tag to AES file (4)\n");
-        fclose(randfp);
+        aesrandom_close(aesrand);
         return -1;
     }
     memset(tag_buffer, 0, 128);
     if (fwrite(tag_buffer, 1, 128, outfp) != 128)
     {
         fprintf(stderr, "Error: Could not write tag to AES file (5)\n");
-        fclose(randfp);
+        aesrandom_close(aesrand);
         return -1;
     }
 
@@ -182,7 +181,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
     if (fwrite(buffer, 1, 2, outfp) != 2)
     {
         fprintf(stderr, "Error: Could not write tag to AES file (6)\n");
-        fclose(randfp);
+        aesrandom_close(aesrand);
         return -1;
     }
 
@@ -208,10 +207,10 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
 
     for (i=0; i<256; i++)
     {
-        if (fread(buffer, 1, 32, randfp) != 32)
+        if (aesrandom_read(aesrand, buffer, 32) != 32)
         {
             fprintf(stderr, "Error: Couldn't read from /dev/random\n");
-            fclose(randfp);
+            aesrandom_close(aesrand);
             return -1;
         }
         sha256_update(  &sha_ctx,
@@ -224,7 +223,7 @@ int encrypt_stream(FILE *infp, FILE *outfp, unsigned char* passwd, int passlen)
     memcpy(IV, digest, 16);
 
     /* We're finished collecting random data */
-    fclose(randfp);
+    aesrandom_close(aesrand);
 
     /* Write the initialization vector to the file */
     if (fwrite(IV, 1, 16, outfp) != 16)
@@ -951,7 +950,6 @@ int main(int argc, char *argv[])
     FILE *outfp = NULL;
     encryptmode_t mode=UNINIT;
     char *infile = NULL;
-    unsigned char pass_input[MAX_PASSWD_BUF];
     unsigned char pass[MAX_PASSWD_BUF];
     int file_count = 0;
     char outfile[1024];
@@ -1076,7 +1074,7 @@ int main(int argc, char *argv[])
     /* Prompt for password if not provided on the command line */
     if (passlen == 0)
     {
-        passlen = read_password(pass_input, mode);
+        passlen = read_password(pass, mode);
 
         switch (passlen)
         {
@@ -1090,6 +1088,7 @@ int main(int argc, char *argv[])
             case AESCRYPT_READPWD_TCSETATTR:
             case AESCRYPT_READPWD_FGETC:
             case AESCRYPT_READPWD_TOOLONG:
+            case AESCRYPT_READPWD_ICONV:
                 fprintf(stderr, "Error in read_password: %s.\n",
                         read_password_error(passlen));
                 cleanup(outfile);
@@ -1100,18 +1099,6 @@ int main(int argc, char *argv[])
                 return -1;
         }
 
-        passlen = passwd_to_utf16(  pass_input,
-                                    strlen((char*)pass_input),
-                                    MAX_PASSWD_LEN,
-                                    pass);
-
-        if (passlen < 0)
-        {
-            cleanup(outfile);
-            /* For security reasons, erase the password */
-            memset_secure(pass, 0, MAX_PASSWD_BUF);
-            return -1;
-        }
     }
 
     file_count = argc - optind;

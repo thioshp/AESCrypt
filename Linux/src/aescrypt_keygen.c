@@ -30,9 +30,7 @@
 #include <string.h>
 #include <strings.h>
 #include <unistd.h> /* getopt */
-#include <iconv.h> /* iconv stuff */
 #include <getopt.h>
-#include <langinfo.h> /* nl_langinfo */
 #include <errno.h> /* errno */
 #include "password.h"
 #include "util.h"
@@ -173,8 +171,7 @@ int main(int argc, char *argv[])
     int passlen=0;
     FILE *outfp = NULL;
     char outfile[1024];
-    unsigned char pass_input[MAX_PASSWD_BUF],
-                  pass[MAX_PASSWD_BUF];
+    unsigned char pass[MAX_PASSWD_BUF];
     int file_count = 0;
     unsigned char bom[2];
     int password_acquired = 0;
@@ -249,7 +246,7 @@ int main(int argc, char *argv[])
     /* Prompt for password if not provided on the command line */
     if (passlen == 0)
     {
-        passlen = read_password(pass_input, ENC);
+        passlen = read_password(pass, ENC);
 
         switch (passlen)
         {
@@ -262,24 +259,13 @@ int main(int argc, char *argv[])
             case AESCRYPT_READPWD_TCSETATTR:
             case AESCRYPT_READPWD_FGETC:
             case AESCRYPT_READPWD_TOOLONG:
+            case AESCRYPT_READPWD_ICONV:
                 fprintf(stderr, "Error in read_password: %s.\n",
                         read_password_error(passlen));
                 return -1;
             case AESCRYPT_READPWD_NOMATCH:
                 fprintf(stderr, "Error: Passwords don't match.\n");
                 return -1;
-        }
-
-        passlen = passwd_to_utf16(  pass_input,
-                                    strlen((char*) pass_input),
-                                    MAX_PASSWD_LEN,
-                                    pass);
-
-        if (passlen < 0)
-        {
-            /* For security reasons, erase the password */
-            memset_secure(pass, 0, MAX_PASSWD_BUF);
-            return -1;
         }
     }
 
