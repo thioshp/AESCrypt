@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_11A9389E8A914DEE99C6A2B7C85E92D9"
+        "OwnerKey" = "8:_E165FFF6359C44C4A3DD9E1578B7B625"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_21F45E740F6D4A1992888D121A1553B3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -27,8 +33,38 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C83C9C86F7B042528D27B132CD0685FF"
+        "OwnerKey" = "8:_21F45E740F6D4A1992888D121A1553B3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C83C9C86F7B042528D27B132CD0685FF"
+        "OwnerKey" = "8:_E165FFF6359C44C4A3DD9E1578B7B625"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E165FFF6359C44C4A3DD9E1578B7B625"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_21F45E740F6D4A1992888D121A1553B3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E165FFF6359C44C4A3DD9E1578B7B625"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_89C70083AE4B458DA30BAAD4C6F3A9C1"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -109,6 +145,14 @@
         {
             "LaunchCondition"
             {
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_DC6935EFDFD64D01B77256C4B8F61B82"
+                {
+                "Name" = "8:.NET Framework"
+                "Message" = "8:[VSDNETMSG]"
+                "FrameworkVersion" = "8:ANY"
+                "AllowLaterVersions" = "11:FALSE"
+                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
+                }
             }
         }
         "File"
@@ -170,24 +214,24 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:AES Crypt"
-        "ProductCode" = "8:{27D8751B-EC95-4F79-940A-8460F9278931}"
-        "PackageCode" = "8:{4E14C641-201B-4069-BFE2-A07393896BD2}"
+        "ProductCode" = "8:{562885D3-41A7-4211-822E-B1B1510069E5}"
+        "PackageCode" = "8:{7ED01FC5-F5B2-41D1-AA09-7F427EFFA78A}"
         "UpgradeCode" = "8:{92D16E60-1F16-4183-A78C-086C07CF436A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:3.09"
+        "ProductVersion" = "8:3.10"
         "Manufacturer" = "8:Packetizer, Inc."
         "ARPHELPTELEPHONE" = "8:"
-        "ARPHELPLINK" = "8:http://www.aescrypt.com/contact.html"
+        "ARPHELPLINK" = "8:https://www.aescrypt.com/contact.html"
         "Title" = "8:AES Crypt"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Packetizer, Inc."
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:AES Crypt - Advanced File Encryption for Windows"
-        "ARPURLINFOABOUT" = "8:http://www.aescrypt.com"
+        "ARPURLINFOABOUT" = "8:https://www.aescrypt.com"
         "ARPPRODUCTICON" = "8:_E165FFF6359C44C4A3DD9E1578B7B625"
         "ARPIconIndex" = "3:204"
         "SearchPath" = "8:"
@@ -631,12 +675,40 @@
         }
         "MergeModule"
         {
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_11A9389E8A914DEE99C6A2B7C85E92D9"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:Microsoft_VC100_ATL_x64.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C83C9C86F7B042528D27B132CD0685FF"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:Microsoft_VC100_CRT_x64.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
         }
         "ProjectOutput"
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_21F45E740F6D4A1992888D121A1553B3"
             {
-            "SourcePath" = "8:..\\AESCrypt32\\x64\\Debug\\AESCrypt32.exe"
+            "SourcePath" = "8:..\\AESCrypt32\\x64\\Release\\AESCrypt32.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_660A60A3C6744A01AAC5B8E0AB9B610E"
@@ -664,7 +736,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_89C70083AE4B458DA30BAAD4C6F3A9C1"
             {
-            "SourcePath" = "8:..\\Console\\Win32\\Debug\\aescrypt.exe"
+            "SourcePath" = "8:..\\Console\\x64\\Release\\aescrypt.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_660A60A3C6744A01AAC5B8E0AB9B610E"
@@ -692,7 +764,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E165FFF6359C44C4A3DD9E1578B7B625"
             {
-            "SourcePath" = "8:..\\AESCrypt\\x64\\Debug\\AESCrypt.dll"
+            "SourcePath" = "8:..\\AESCrypt\\x64\\Release\\AESCrypt.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_660A60A3C6744A01AAC5B8E0AB9B610E"
